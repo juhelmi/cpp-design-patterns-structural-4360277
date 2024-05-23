@@ -96,6 +96,7 @@ public:
         cout << "VirtualDriveAdapter::getFreeSpace() -> Calling VirtualDrive::getAvailableStorage()" << endl;
         const int available = totalSpace - usedSpace();
         cout << "Available VirtualDrive storage: " << available << " GB" << endl;
+        cout << format("Available VirtualDrive storage: {} GB\n ", available);
         return available;
     }
 
