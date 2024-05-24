@@ -1,5 +1,8 @@
 #include <iostream>
 #include <memory>
+
+#include <format>
+
 using namespace std;
 
 class Pizza
@@ -89,6 +92,22 @@ public:
     }
 };
 
+class OnionDecorator : public ToppingDecorator
+{
+public:
+    explicit OnionDecorator(unique_ptr<Pizza> pizza) : ToppingDecorator(move(pizza)) {}
+
+    string description() const override
+    {
+        return ToppingDecorator::description() + " with onion";
+    }
+
+    double price() const override
+    {
+        return ToppingDecorator::price() + 0.5;
+    }
+};
+
 class ExtraCheeseDecorator : public ToppingDecorator
 {
 public:
@@ -125,7 +144,8 @@ int main()
 {
     // MargheritaPizza with mushrooms and extra cheese
     auto margheritaPizza = make_unique<MargheritaPizza>();
-    auto margheritaWithMushrooms = make_unique<MushroomDecorator>(move(margheritaPizza));
+    auto margheritaWithMushrooms1 = make_unique<MushroomDecorator>(move(margheritaPizza));
+    auto margheritaWithMushrooms = make_unique<OnionDecorator>(move(margheritaWithMushrooms1));
     auto margheritaExtraCheeseMushrooms = make_unique<ExtraCheeseDecorator>(move(margheritaWithMushrooms));
 
     cout << margheritaExtraCheeseMushrooms->description() << " costs $" << margheritaExtraCheeseMushrooms->price() << endl;
@@ -133,7 +153,9 @@ int main()
     // Pepperoni pizza with mushrooms, tomatoes, and extra cheese
     auto pepperoniPizza = make_unique<PepperoniPizza>();
     auto pepperoniWithMushrooms = make_unique<MushroomDecorator>(move(pepperoniPizza));
-    auto pepperoniWithTomatoMushrooms = make_unique<TomatoDecorator>(move(pepperoniWithMushrooms));
+    auto pepperoniWithTomatoMushrooms1 = make_unique<TomatoDecorator>(move(pepperoniWithMushrooms));
+    auto pepperoniWithTomatoMushrooms2 = make_unique<OnionDecorator>(move(pepperoniWithTomatoMushrooms1));
+    auto pepperoniWithTomatoMushrooms = make_unique<OnionDecorator>(move(pepperoniWithTomatoMushrooms2));
     auto pepperoniTomatoMushroomsExtraCheese = make_unique<ExtraCheeseDecorator>(move(pepperoniWithTomatoMushrooms));
 
     cout << pepperoniTomatoMushroomsExtraCheese->description() << " costs $" << pepperoniTomatoMushroomsExtraCheese->price() << endl;
