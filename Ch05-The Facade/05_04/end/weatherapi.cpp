@@ -1,6 +1,9 @@
 #include <iostream>
 #include <string>
 
+#include <format>
+#include <tuple>
+
 using namespace std;
 
 class WorldWeatherAPI
@@ -38,6 +41,21 @@ public:
         float humidity = 60.0f;
         string shortDescription = "Partly cloudy with a chance of rain";
         return make_tuple(temperature, humidity, shortDescription);
+    }
+};
+
+class WeatherFascade
+{
+    WorldWeatherAPI m_wwapi;
+    FreeWeather m_fws;
+    RealtimeWeatherService m_rtws;
+public:
+    WeatherFascade() : m_wwapi(), m_fws(), m_rtws()
+    {
+        //
+    }
+    tuple<float,float,string> currentWeather(const string &location) {
+
     }
 };
 

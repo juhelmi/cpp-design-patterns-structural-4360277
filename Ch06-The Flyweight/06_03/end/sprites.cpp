@@ -3,6 +3,7 @@
 #include <unordered_map>
 
 using namespace std;
+const unsigned int INT_MAX = 1000000;
 
 class Texture
 {
@@ -16,6 +17,7 @@ public:
     {
         return "<" + m_FileName + " id" + to_string(m_Id) + ">";
     }
+
 private:
     const string m_FileName;
     const int m_Id;
@@ -24,7 +26,7 @@ private:
 class Sprite
 {
 public:
-    Sprite(const Texture *texture) : m_Texture(texture) 
+    Sprite(const Texture *texture) : m_Texture(texture)
     {
         cout << "Creating sprite with texture file " << texture->description() << endl;
     }
@@ -42,6 +44,7 @@ public:
         // draw sprite
         cout << "Rendering sprite with texture: " << m_Texture->description() << endl;
     }
+
 private:
     int m_Width;
     int m_Height;
@@ -54,7 +57,7 @@ private:
 class SpriteFactory
 {
 public:
-    Sprite* makeSprite(const string &fileName)
+    Sprite *makeSprite(const string &fileName)
     {
         auto it = m_SpritePool.find(fileName);
         if (it != m_SpritePool.end())
@@ -64,7 +67,7 @@ public:
         }
         else
         {
-            // create new texture and add it to the pool            
+            // create new texture and add it to the pool
             const auto texture = getTexture(fileName);
             auto [newIt, _] = m_SpritePool.emplace(fileName, new Sprite(texture));
             return newIt->second;
@@ -85,10 +88,10 @@ public:
     }
 
 private:
-    unordered_map<string, Sprite*> m_SpritePool;
-    unordered_map<string, Texture*> m_TexturePool;
+    unordered_map<string, Sprite *> m_SpritePool;
+    unordered_map<string, Texture *> m_TexturePool;
 
-    const Texture* getTexture(const string &fileName)
+    const Texture *getTexture(const string &fileName)
     {
         auto it = m_TexturePool.find(fileName);
         if (it != m_TexturePool.end())
@@ -98,7 +101,7 @@ private:
         }
         else
         {
-            // create new texture and add it to the pool            
+            // create new texture and add it to the pool
             auto [newIt, _] = m_TexturePool.emplace(fileName, new Texture(fileName));
             return newIt->second;
         }
@@ -115,9 +118,9 @@ int main()
     SpriteFactory spriteFactory;
 
     for (int i = 0; i < numSprites; ++i)
-    {        
+    {
         auto sprite = spriteFactory.makeSprite(textureFile);
-        sprite->setPositionSize(10, 10, i*10, i*10);        
+        sprite->setPositionSize(10, 10, i * 10, i * 10);
         sprites.push_back(sprite);
     }
 
